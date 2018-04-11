@@ -16,6 +16,7 @@ import org.sakaiproject.cheftool.RunData;
 import org.sakaiproject.cheftool.VelocityPortlet;
 import org.sakaiproject.cheftool.api.Alert;
 import org.sakaiproject.cheftool.api.Menu;
+import org.sakaiproject.component.api.ServerConfigurationService;
 import org.sakaiproject.component.cover.ComponentManager;
 import org.sakaiproject.event.api.SessionState;
 import org.sakaiproject.irubric.api.RubricToolService;
@@ -29,6 +30,7 @@ import org.sakaiproject.tool.cover.ToolManager;
 import org.sakaiproject.util.ResourceLoader;
 import org.sakaiproject.util.StringUtil;
 import org.sakaiproject.irubric.model.IRubricService;
+import org.sakaiproject.service.gradebook.shared.GradebookNotFoundException;
 
 public class RubricAction extends PagedResourceActionII
 {
@@ -91,7 +93,8 @@ public class RubricAction extends PagedResourceActionII
 	 * Default is to use when Portal starts up
 	 */
 	private RubricToolService rubService = (RubricToolService) ComponentManager.get("org.sakaiproject.irubric.api.RubricToolService");
-	ScoringService scoringService = (ScoringService)  ComponentManager.get("org.sakaiproject.scoringservice.api.ScoringService"); 
+	ScoringService scoringService = (ScoringService)  ComponentManager.get("org.sakaiproject.scoringservice.api.ScoringService");
+	private ServerConfigurationService serverConfigService = (ServerConfigurationService) ComponentManager.get("org.sakaiproject.component.api.ServerConfigurationService");
 	
     public final static String TOOL_ID_GRADEBOOK = "sakai.gradebook.tool";
 
@@ -265,8 +268,18 @@ public class RubricAction extends PagedResourceActionII
 		String template = (String) getContext(data).get("template");
 
 		//process paging and get list assignment in function sizeResources
-		List assignments = prepPage(state);
-			
+		List<Assignment> assignments = new ArrayList<>();
+		try {
+			assignments = prepPage(state);
+			context.put("errorMsg","");
+		} catch (GradebookNotFoundException ex) {
+			context.put("errorMsg", rb.getString("noGradebook.error"));
+			M_log.debug("No Gradebook tool in site", ex);
+		} catch (Exception ex) {
+			context.put("errorMsg", rb.getFormattedMessage("unexpected.error", new Object[] {serverConfigService.getString("mail.support")}));
+			M_log.warn("Unexpected error", ex);
+		}
+
 		//use set hide link gradeall(when user is selected)	
 		context.put("view", IRubricService.CMD_TOOL_GRADEALL);
 

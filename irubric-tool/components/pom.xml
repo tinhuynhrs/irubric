@@ -2,37 +2,34 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  	<modelVersion>4.0.0</modelVersion>
-  	
-  	<parent>
-        <groupId>org.sakaiproject.irubric-pt</groupId>
-    	<artifactId>irubric-pt</artifactId>
-    	<version>1.0.0</version>
-  	</parent>
-  	
-  	<name>iRubric Component Pack</name>
-  	<groupId>org.sakaiproject.irubric-pt</groupId>
-  	<artifactId>irubric-pt-pack</artifactId>
-  	
-  	<packaging>sakai-component</packaging>
-  	<properties>
-    	<deploy.target>components</deploy.target>
-  	</properties>
-  	
-  	<dependencies>
-  		<!-- irubric -->
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.sakaiproject.irubric</groupId>
+        <artifactId>irubric-tool-base</artifactId>
+        <version>12-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <name>irubric-tool-pack</name>
+    <groupId>org.sakaiproject.irubric</groupId>
+    <artifactId>irubric-tool-pack</artifactId>
+    <packaging>sakai-component</packaging>
+
+    <properties>
+        <deploy.target>components</deploy.target>
+    </properties>
+
+    <dependencies>
         <dependency>
-            <groupId>org.sakaiproject.irubric-pt</groupId>
-            <artifactId>irubric-pt-impl</artifactId>
-            <version>${project.version}</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>irubric-tool-impl</artifactId>
         </dependency>
-        
-  	</dependencies>
-  	
+    </dependencies>
+
     <build>
         <resources>
             <resource>
-            	<!-- Include DB schema & upgrade scripts -->
+                <!-- Include DB schema & upgrade scripts -->
                 <directory>${basedir}/..</directory>
                 <includes>
                     <include>database/**</include>

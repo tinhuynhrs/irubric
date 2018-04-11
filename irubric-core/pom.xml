@@ -2,27 +2,33 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>irubric</artifactId>
-    <packaging>pom</packaging>
-    <name>iRubric</name>
-    <description>iRubric Scoring Agent</description>
-
     <parent>
         <groupId>org.sakaiproject</groupId>
-        <artifactId>base</artifactId>
+        <artifactId>master</artifactId>
         <version>12-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>../master/pom.xml</relativePath>
     </parent>
+
+    <name>irubric-core-base</name>
+    <groupId>org.sakaiproject.irubric</groupId>
+    <artifactId>irubric-core</artifactId>
+    <packaging>pom</packaging>
+    <description>iRubric Scoring Agent</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <dependencyManagement>
         <dependencies>
-
-            <!-- project dependencies -->
-
-
             <dependency>
-                <groupId>org.sakaiproject</groupId>
-                <artifactId>irubric-impl</artifactId>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>irubric-core-model</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>irubric-core-impl</artifactId>
                 <version>${project.version}</version>
                 <scope>runtime</scope>
             </dependency>
@@ -30,7 +36,7 @@
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-		<version>${sakai.lombok.version}</version>
+                <version>${sakai.lombok.version}</version>
                 <type>jar</type>
                 <scope>provided</scope>
             </dependency>
@@ -41,9 +47,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <repositories>
         <repository>
@@ -70,7 +73,6 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
-
 
     <modules>
         <module>model</module>

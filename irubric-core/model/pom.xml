@@ -3,73 +3,54 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>irubric</artifactId>
-        <groupId>org.sakaiproject</groupId>
+        <groupId>org.sakaiproject.irubric</groupId>
+        <artifactId>irubric-core</artifactId>
         <version>12-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
-    <groupId>org.sakaiproject</groupId>
-    <artifactId>irubric-model</artifactId>
+
+    <name>irubric-core-model</name>
+    <groupId>org.sakaiproject.irubric</groupId>
+    <artifactId>irubric-core-model</artifactId>
     <packaging>jar</packaging>
+
     <properties>
         <deploy.target>shared</deploy.target>
     </properties>
-    <dependencies>
 
-<!--         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate</artifactId>
-        </dependency>
- -->
+    <dependencies>
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
             <version>1.0.4</version>
         </dependency>
-<!--         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency> -->
         <dependency>
             <groupId>${sakai.spring.groupId}</groupId>
             <artifactId>${sakai.spring.artifactId}</artifactId>
-            <version>${sakai.spring.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <!-- Sakai dependencies -->
         <dependency>
             <groupId>org.sakaiproject.edu-services.scoringservice</groupId>
             <artifactId>scoring-service-api</artifactId>
             <version>${project.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.sakaiproject.edu-services.gradebook</groupId>
             <artifactId>gradebook-service-api</artifactId>
-            <version>${project.version}</version>
-
         </dependency>
         <dependency>
             <groupId>org.sakaiproject.edu-services.gradebook</groupId>
             <artifactId>gradebook-service-hibernate</artifactId>
-            <version>${project.version}</version>
-
         </dependency>
-
         <dependency>
             <groupId>org.sakaiproject.edu-services.sections</groupId>
             <artifactId>sections-api</artifactId>
-            <version>${project.version}</version>
-
         </dependency>
-<!--         <dependency>
-            <groupId>org.sakaiproject.portal</groupId>
-            <artifactId>sakai-portal-util</artifactId>
-            <version>${sakai.version}</version>
-        </dependency> -->
         <dependency>
             <groupId>org.sakaiproject.edu-services.course-management</groupId>
             <artifactId>coursemanagement-api</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.sakaiproject.kernel</groupId>
@@ -79,12 +60,8 @@
             <groupId>org.sakaiproject.kernel</groupId>
             <artifactId>sakai-component-manager</artifactId>
         </dependency>
-<!--         <dependency>
-            <groupId>org.sakaiproject.kernel</groupId>
-            <artifactId>sakai-kernel-util</artifactId>
-        </dependency> -->
-
     </dependencies>
+
     <build>
       <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
       <resources>

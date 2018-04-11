@@ -1,5 +1,8 @@
 
 <div class="portletBody">
+#if ($errorMsg != "")
+	<div id="errorMsg" class="messageError">$errorMsg</div>
+#else
 	<!--include file menu -->
 	#parse ("/vm/irubric/chef_irubrics_menu.vm")
 
@@ -140,5 +143,5 @@
 			<tr>
 		#end
 	</table>
-
+#end
 </div>

@@ -69,8 +69,6 @@ public class IRubricServiceImpl implements Serializable, IRubricService {
 	private String certID;
 	private String xtoken;
 	private String termPropertyName;
-	private String[] evaluator;
-	private String[] evaluatee;
 
 	private String academicSessionId;
 	private String sslPort;
@@ -323,11 +321,6 @@ public class IRubricServiceImpl implements Serializable, IRubricService {
 
 		this.termPropertyName = serverConfigurationService
 				.getString("irubric.termPropertyName");
-
-		this.evaluator = serverConfigurationService
-				.getStrings("irubric.evaluator");
-		this.evaluatee = serverConfigurationService
-				.getStrings("irubric.evaluatee");
 	}
 
 	/**
@@ -341,7 +334,7 @@ public class IRubricServiceImpl implements Serializable, IRubricService {
 			Site site = siteService.getSite(siteId);
 			academicSessionId = site.getProperties().getProperty(
 					this.termPropertyName);
-			if ((academicSessionId == "") || (academicSessionId == null))
+			if (("".equals( academicSessionId)) || (academicSessionId == null))
 			{									
 				academicSessionId = "OTHER";
 			}
@@ -548,7 +541,7 @@ public class IRubricServiceImpl implements Serializable, IRubricService {
 		Helper.addUrlParam(dataBuilder, P_USR_ROLE, URLUtils
 				.encodeUrl(userRole));
 
-		String userRoleType = getUserRoleType(userRole);
+		String userRoleType = getUserRoleType(teacher, currentSiteId);
 		Helper.addUrlParam(dataBuilder, P_ROLE_TYPE, URLUtils
 				.encodeUrl(userRoleType));
 
@@ -776,8 +769,6 @@ public class IRubricServiceImpl implements Serializable, IRubricService {
 	 * @param gradebookItemId
 	 * @param iRubricId
 	 * @param iRubricTitle
-	 * 
-	 * @return void
 	 */
 	@Override
     public void updateAssignmetByRubric(Long gradebookItemId, String iRubricId,
@@ -804,32 +795,22 @@ public class IRubricServiceImpl implements Serializable, IRubricService {
 	/**
 	 * Get the role type name by user role
 	 * 
-	 * @param roleName
+	 * @param user
+	 * @param siteID
 	 * @return
 	 */
 	@Override
-    public String getUserRoleType(String roleName) {
-		if (roleName == null) {
+    public String getUserRoleType(User user, String siteID) {
+		if (user == null) {
 			return EMPTY_STRING;
 		}
 
-		for (int i = 0; i < evaluator.length; i++) {
-			LOG.info(evaluator[i]);
-			if (evaluator[i].toLowerCase()
-					.equals(roleName.trim().toLowerCase())) {
-				return ROLE_TYPE_EVALUATOR;
-			}
+		// If user is admin or has grading privileges, they are an evaluator; otherwise they are an evaluatee
+		if (gradebookService.isUserAllowedToGrade(siteID, user.getId())) {
+			return ROLE_TYPE_EVALUATOR;
+		} else {
+			return ROLE_TYPE_EVALUATEE;
 		}
-
-		for (int i = 0; i < evaluatee.length; i++) {
-			LOG.info(evaluatee[i]);
-			if (evaluatee[i].toLowerCase()
-					.equals(roleName.trim().toLowerCase())) {
-				return ROLE_TYPE_EVALUATEE;
-			}
-		}
-
-		return EMPTY_STRING;
 	}
 
     /**
@@ -875,7 +856,7 @@ public class IRubricServiceImpl implements Serializable, IRubricService {
    				Helper.addUrlParam(dataBuilder, P_GDB_ITEM_ENTRY_TYPE, URLUtils
    						.encodeUrl(ENTRY_OPT_LETTER));
 
-   			String pointsPossible = null;
+   			String pointsPossible;
    			if (gradebookItem.getPoints() == null) {
    				pointsPossible = Helper.EMPTY_STRING;
    			} else {
@@ -931,7 +912,7 @@ public class IRubricServiceImpl implements Serializable, IRubricService {
                 Helper.addUrlParam(dataBuilder, P_GDB_ITEM_ENTRY_TYPE, URLUtils
                         .encodeUrl(ENTRY_OPT_LETTER));
 
-			String pointsPossible = null;
+			String pointsPossible;
 			if (gradebookItem.getPoints() == null) {
 				pointsPossible = Helper.EMPTY_STRING;
 			} else {
@@ -959,7 +940,7 @@ public class IRubricServiceImpl implements Serializable, IRubricService {
    			String gradebookItemId = gradebookItem.getId().toString();
    			Helper.addUrlParam(dataBuilder, P_GDB_ITEM_ID, URLUtils
                        .encodeUrl(gradebookItemId));
-   			String pointsPossible = null;
+   			String pointsPossible;
    			if (gradebookItem.getPoints() == null) {
    				pointsPossible = "";
    			} else {
@@ -1015,8 +996,8 @@ public class IRubricServiceImpl implements Serializable, IRubricService {
    		boolean isInfoEnabled = LOG.isInfoEnabled();
         String result = null;
 
-   		HttpURLConnection connection = null;
-   		DataOutputStream dout = null;
+   		HttpURLConnection connection;
+   		DataOutputStream dout;
 
    		if (isInfoEnabled) {
    			LOG.info("Init request URL: " + getInitReqURL());
@@ -1090,7 +1071,7 @@ public class IRubricServiceImpl implements Serializable, IRubricService {
     }
 
     public void refreshGrades(String gradebookUid, String gradebookItemIdStr) {
-        String dataPacket = null;
+        String dataPacket;
         // build data packet to send to iRubric system
         Long gradebookItemId = Long.parseLong(gradebookItemIdStr);
         try {
@@ -1148,7 +1129,7 @@ public class IRubricServiceImpl implements Serializable, IRubricService {
    		StringBuilder dataBuilder = new StringBuilder(buildDefaultPostData(gradebookUid));
    		addUrlParam(dataBuilder, PURPOSE, purpose);
 
-        String studentId = "";
+        String studentId;
 
         if (purpose.equals(CMD_GRADE_ALL) && gradebookItemId != 0) {
 
@@ -1205,7 +1186,7 @@ public class IRubricServiceImpl implements Serializable, IRubricService {
 			String gradebookItemId = gradebookItem.getId().toString();
 			Helper.addUrlParam(dataBuilder, P_GDB_ITEM_ID, URLUtils
                     .encodeUrl(gradebookItemId));
-			String pointsPossible = null;
+			String pointsPossible;
 			if (gradebookItem.getPoints() == null) {
 				pointsPossible = "";
 			} else {
@@ -1294,7 +1275,7 @@ public class IRubricServiceImpl implements Serializable, IRubricService {
 
 					   //update grade if its new or its changed
 					   if (oldScore == null || !score.equals(oldScore)) {
-						   gradebookService.saveGradeAndCommentForStudent(gradebookUuid, new Long(gradebookItemId), studentUId, score.toString(), null);
+						   gradebookService.saveGradeAndCommentForStudent(gradebookUuid, gradebookItemId, studentUId, score, null);
 					   }
 		   }
                }

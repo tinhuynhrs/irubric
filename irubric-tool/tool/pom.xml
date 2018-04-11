@@ -3,31 +3,33 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
-  	<parent>
-        <groupId>org.sakaiproject.irubric-pt</groupId>
-    	<artifactId>irubric-pt</artifactId>
-    	<version>1.0.0</version>
-  	</parent>
+    <parent>
+        <groupId>org.sakaiproject.irubric</groupId>
+        <artifactId>irubric-tool-base</artifactId>
+        <version>12-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
   
-  	<name>iRubric Tool</name>
-    <groupId>org.sakaiproject.irubric-pt</groupId>
+    <name>irubric-pt-tool</name>
+    <groupId>org.sakaiproject.irubric</groupId>
     <artifactId>irubric-pt-tool</artifactId>
-  	
-  	<packaging>war</packaging>
+    <packaging>war</packaging>
 
-  	<dependencies>         
+    <dependencies>
         <!-- irubric -->
         <dependency>
-            <groupId>org.sakaiproject.irubric-pt</groupId>
-            <artifactId>irubric-pt-api</artifactId>
-            <version>${project.version}</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>irubric-tool-api</artifactId>
         </dependency>
-      
         <dependency>
-            <groupId>org.sakaiproject.irubric-pt</groupId>
-            <artifactId>irubric-pt-impl</artifactId>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>irubric-tool-impl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>irubric-core-model</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -63,28 +65,23 @@
         <dependency>
             <groupId>org.sakaiproject.kernel</groupId>
             <artifactId>sakai-kernel-api</artifactId>
-            <version>${sakai.kernel.version}</version>
         </dependency>
         <dependency>
             <groupId>org.sakaiproject.kernel</groupId>
             <artifactId>sakai-component-manager</artifactId>
-            <version>${sakai.kernel.version}</version>
         </dependency>
         <dependency>
             <groupId>org.sakaiproject.kernel</groupId>
             <artifactId>sakai-kernel-util</artifactId>
-            <version>${sakai.kernel.version}</version>
         </dependency>
         
         <dependency>
             <groupId>org.sakaiproject.velocity</groupId>
             <artifactId>sakai-velocity-tool-api</artifactId>
-            <version>${sakai.version}</version>
         </dependency>
         <dependency>
             <groupId>org.sakaiproject.velocity</groupId>
             <artifactId>sakai-velocity-tool</artifactId>
-            <version>${sakai.version}</version>
         </dependency>
 
         <!-- Others--> 
@@ -103,14 +100,5 @@
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 		</dependency>
-
-        
-        <dependency>
-            <groupId>org.sakaiproject</groupId>
-            <artifactId>irubric-model</artifactId>
-            <version>${sakai.version}</version>
-            <scope>provided</scope>
-        </dependency>
 	</dependencies>
-    
 </project>

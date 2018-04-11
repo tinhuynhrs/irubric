@@ -3,13 +3,15 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<artifactId>irubric</artifactId>
-		<groupId>org.sakaiproject</groupId>
+		<groupId>org.sakaiproject.irubric</groupId>
+		<artifactId>irubric-core</artifactId>
 		<version>12-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
-	<groupId>org.sakaiproject</groupId>
-	<artifactId>irubric-pack</artifactId>
 
+	<name>irubric-core-pack</name>
+	<groupId>org.sakaiproject.irubric</groupId>
+	<artifactId>irubric-core-pack</artifactId>
 	<packaging>sakai-component</packaging>
 
 	<properties>
@@ -19,14 +21,12 @@
 	<dependencies>
 		<!-- internal dependencies -->
 		<dependency>
-			<groupId>org.sakaiproject</groupId>
-			<artifactId>irubric-impl</artifactId>
-			<version>${project.version}</version>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>irubric-core-impl</artifactId>
 		</dependency>
         <dependency>
-            <groupId>org.sakaiproject</groupId>
-            <artifactId>irubric-model</artifactId>
-            <version>${project.version}</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>irubric-core-model</artifactId>
             <scope>provided</scope>
         </dependency>
 
@@ -58,8 +58,6 @@
 					<warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
 				</configuration>
 			</plugin>
-
 		</plugins>
-
 	</build>
 </project>

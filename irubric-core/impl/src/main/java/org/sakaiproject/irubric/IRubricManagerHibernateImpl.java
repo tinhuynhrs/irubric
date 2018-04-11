@@ -1,27 +1,23 @@
 package org.sakaiproject.irubric;
 
-import java.util.*;
 import java.util.Map.Entry;
-import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-//import org.apache.commons.logging.Log;
-//import org.apache.commons.logging.LogFactory;
-
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.type.StringType;
 
 import org.sakaiproject.irubric.model.GradableObjectRubric;
 import org.sakaiproject.irubric.model.IRubricManager;
 import org.sakaiproject.service.gradebook.shared.Assignment;
-import org.sakaiproject.service.gradebook.shared.GradebookNotFoundException;
 import org.sakaiproject.service.gradebook.shared.GradebookService;
 
-
-
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate4.HibernateCallback;
+import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 /**
  * Manages Rubric persistence via hibernate.
@@ -40,7 +36,6 @@ public class IRubricManagerHibernateImpl extends HibernateDaoSupport
      * Update a GradableObjectRubric object
      *
      * @param gradableObjectRubric
-	 * @return void
      */
 	public void updateGradableObjectRubric(final GradableObjectRubric gradableObjectRubric){
     	HibernateCallback hc = new HibernateCallback() {
@@ -61,7 +56,7 @@ public class IRubricManagerHibernateImpl extends HibernateDaoSupport
 	/**
      * Get a GradableObjectRubric object by assignment
      *
-     * @param assignmentId
+     * @param gradableObjectId
 	 * @return GradableObjectRubric
      */
     public GradableObjectRubric getGradableObjectRubric(Long gradableObjectId) {
@@ -80,7 +75,7 @@ public class IRubricManagerHibernateImpl extends HibernateDaoSupport
      */
     public List getGradableObjectRubrics(final List<Long> gradableObjectIds) {
         HibernateCallback hc = new HibernateCallback() {
-            public Object doInHibernate(Session session) throws HibernateException ,SQLException {
+            public Object doInHibernate(Session session) throws HibernateException {
                 List gradableObjectRubrics = new ArrayList();
 
                 if (gradableObjectIds != null && !gradableObjectIds.isEmpty()) {
@@ -118,7 +113,7 @@ public class IRubricManagerHibernateImpl extends HibernateDaoSupport
         } else {
             // if there are more than MAX_NUMBER_OF_SQL_PARAMETERS_IN_LIST, we need to do multiple queries
             int begIndex = 0;
-            int endIndex = 0;
+            int endIndex;
 
             while (begIndex < fullList.size()) {
                 endIndex = begIndex + MAX_NUMBER_OF_SQL_PARAMETERS_IN_LIST;
@@ -140,6 +135,7 @@ public class IRubricManagerHibernateImpl extends HibernateDaoSupport
     
     /**
      * DN 2012-05-28: defined function get studentUIds by gradebookItemId/assignemntId
+	 * @param gradebookUid
      * @param gradebookItemId
      * @return String: studentUIds("studentUId1,studentUId2,...")
 	 */
@@ -149,16 +145,16 @@ public class IRubricManagerHibernateImpl extends HibernateDaoSupport
     	// retrieve only the students the current user is allowed to grade
     	Map<String, String> studentIdFunctionMap = gradebookService.getViewableStudentsForItemForCurrentUser(gradebookUid, gradebookItemId);
     	
-    	// We now need to iterate through the map to identify the students that
-    	// the user may actually grade, not just view
-    	for (Iterator iterator = studentIdFunctionMap.entrySet().iterator(); iterator.hasNext();) {
-			Entry entry = (Entry) iterator.next();
+		// We now need to iterate through the map to identify the students that
+		// the user may actually grade, not just view
+		for(Entry entry : studentIdFunctionMap.entrySet())
+		{
 			String studentUid = (String)entry.getKey();
 			String viewOrGrade = (String)entry.getValue();
 			if (GradebookService.gradePermission.equals(viewOrGrade)) {
 				studentUids += studentUid + ",";
 			}
-    	}
+		}
     	
     	return studentUids;
     }
@@ -171,8 +167,8 @@ public class IRubricManagerHibernateImpl extends HibernateDaoSupport
 		{
 			public Object doInHibernate(Session session) throws HibernateException {
 		    	Query q = session.createQuery("select g.id from GradableObject as g where g.gradebook.uid=? and g.name = ? and g.removed=false");
-		    	q.setParameter(0, gradebookUid, Hibernate.STRING);
-		    	q.setParameter(1, name, Hibernate.STRING);
+		    	q.setParameter(0, gradebookUid, StringType.INSTANCE);
+		    	q.setParameter(1, name, StringType.INSTANCE);
 		    	return q.uniqueResult();
 		    }
 		};
@@ -188,9 +184,9 @@ public class IRubricManagerHibernateImpl extends HibernateDaoSupport
 		{
 			public Object doInHibernate(Session session) throws HibernateException {
 		    	Query q = session.createQuery("select g.id from GradableObject as g where g.gradebook.uid=? and g.externalId = ? and g.removed=false and g.externallyMaintained=true and g.externalAppName= ?");
-		    	q.setParameter(0, gradebookUid, Hibernate.STRING);
-		    	q.setParameter(1, name, Hibernate.STRING);
-		    	q.setParameter(2, "Assignments", Hibernate.STRING);
+		    	q.setParameter(0, gradebookUid, StringType.INSTANCE);
+		    	q.setParameter(1, name, StringType.INSTANCE);
+		    	q.setParameter(2, "Assignments", StringType.INSTANCE);
 		    	return q.uniqueResult();
 		    }
 		};
@@ -205,15 +201,11 @@ public class IRubricManagerHibernateImpl extends HibernateDaoSupport
     *   return true if have attach irubric, false is otherwise
     */
     private boolean isHaveAttach(Long assignmentId) {
-
-        if(getGradableObjectRubric(assignmentId) != null)
-            return true;
-
-        return false;
+        return getGradableObjectRubric(assignmentId) != null;
     }
     
     public List<GradableObjectRubric> getAllRubricsInGradebook(String gradebookUid) {
-    	List<GradableObjectRubric> rubrics = new ArrayList<GradableObjectRubric>();
+    	List<GradableObjectRubric> rubrics = new ArrayList<>();
     	
     	// retrieve all of the gradebook items in the gradebook
     	List<Assignment> fromGbItems = gradebookService.getAssignments(gradebookUid);
@@ -242,7 +234,7 @@ public class IRubricManagerHibernateImpl extends HibernateDaoSupport
                 // if rubrics exist, we need to link the new gb items to the same rubrics
                 if (fromRubrics != null && !fromRubrics.isEmpty()) {
                     // put the rubrics in a map: gb item id --> rubric
-                    Map<Long, GradableObjectRubric> fromRubricMap = new HashMap<Long, GradableObjectRubric>();
+                    Map<Long, GradableObjectRubric> fromRubricMap = new HashMap<>();
                     for (GradableObjectRubric rubric : fromRubrics) {
                         fromRubricMap.put(rubric.getGradableObjectId(), rubric);
                     }
@@ -253,7 +245,7 @@ public class IRubricManagerHibernateImpl extends HibernateDaoSupport
                     if (toGbItems != null && !toGbItems.isEmpty()) {
                         // put the gb item name and id in a map for easy access
                         // later on
-                        Map<String, Long> toGbItemMap = new HashMap<String, Long>();
+                        Map<String, Long> toGbItemMap = new HashMap<>();
                         for (Assignment toGbItem : toGbItems) {
                             toGbItemMap.put(toGbItem.getName(), toGbItem.getId());
                         }
@@ -286,7 +278,7 @@ public class IRubricManagerHibernateImpl extends HibernateDaoSupport
      * given a list of gradebook items, returns a list of their ids
      */
     private List<Long> getGradebookItemIds(List<Assignment> gbItems) {
-        List<Long> gbItemIds = new ArrayList<Long>();
+        List<Long> gbItemIds = new ArrayList<>();
         if(gbItems != null && !gbItems.isEmpty()) {
             for (Assignment gbItem : gbItems) {
                 gbItemIds.add(gbItem.getId());
@@ -302,4 +294,3 @@ public class IRubricManagerHibernateImpl extends HibernateDaoSupport
     }
     
 }
-

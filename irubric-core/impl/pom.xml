@@ -3,24 +3,27 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>irubric</artifactId>
-        <groupId>org.sakaiproject</groupId>
+        <groupId>org.sakaiproject.irubric</groupId>
+        <artifactId>irubric-core</artifactId>
         <version>12-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
-    <groupId>org.sakaiproject</groupId>
-    <artifactId>irubric-impl</artifactId>
+
+    <name>irubric-core-impl</name>
+    <groupId>org.sakaiproject.irubric</groupId>
+    <artifactId>irubric-core-impl</artifactId>
     <packaging>jar</packaging>
-<!--     <properties>
-        <deploy.target>shared</deploy.target>
-    </properties> -->
 
     <dependencies>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>irubric-core-model</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.sakaiproject.portal</groupId>
             <artifactId>sakai-portal-util</artifactId>
-            <version>${sakai.version}</version>
         </dependency>
-        
         <dependency>
             <groupId>org.sakaiproject.kernel</groupId>
             <artifactId>sakai-kernel-api</artifactId>
@@ -29,48 +32,10 @@
             <groupId>org.sakaiproject.kernel</groupId>
             <artifactId>sakai-kernel-util</artifactId>
         </dependency>
-      
-        <!-- Section Awareness(need for function getAllStudentUids) -->
-        <dependency>
-          <groupId>org.sakaiproject.edu-services.sections</groupId>
-          <artifactId>sections-api</artifactId>
-        </dependency>
-
-        <dependency>
-          <groupId>org.hibernate</groupId>
-          <artifactId>hibernate</artifactId>
-          <version>3.2.6.ga</version>
-        </dependency>
-        <dependency>
-          <groupId>org.springframework</groupId>
-          <artifactId>spring</artifactId>
-          <version>2.5.6.SEC03</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.sakaiproject</groupId>
-            <artifactId>irubric-model</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>org.sakaiproject.edu-services.course-management</groupId>
             <artifactId>coursemanagement-api</artifactId>
-            <version>${project.version}</version>
         </dependency>
-       <!--rubric mapping -->
-<!--        <dependency>
-           <groupId>${project.groupId}</groupId>
-           <artifactId>sakai-gradebook-irubric</artifactId>
-           <version>${project.version}</version>
-        </dependency> -->
-        <!--rubric api -->
-<!--         <dependency>
-           <groupId>${project.groupId}</groupId>
-           <artifactId>sakai-gradebook-irubric-api</artifactId>
-           <version>${project.version}</version>
-        </dependency> -->
-
         <dependency>
           <groupId>org.sakaiproject.kernel</groupId>
           <artifactId>sakai-component-manager</artifactId>
@@ -82,7 +47,6 @@
         <dependency>
           <groupId>org.sakaiproject.edu-services.gradebook</groupId>
           <artifactId>gradebook-service-hibernate</artifactId>
-          <version>${project.version}</version>
           <scope>provided</scope>
         </dependency>
         <dependency>
@@ -91,6 +55,21 @@
           <version>${project.version}</version>
         </dependency>
 
+        <!-- Section Awareness(need for function getAllStudentUids) -->
+        <dependency>
+          <groupId>org.sakaiproject.edu-services.sections</groupId>
+          <artifactId>sections-api</artifactId>
+        </dependency>
+
+        <dependency>
+          <groupId>${sakai.hibernate.groupId}</groupId>
+          <artifactId>${sakai.hibernate.artifactId}</artifactId>
+          <version>${sakai.hibernate.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>${sakai.spring.groupId}</groupId>
+          <artifactId>spring-orm</artifactId>
+        </dependency>
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>

@@ -2,48 +2,42 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  	<modelVersion>4.0.0</modelVersion>
-  
-  	<parent>
-        <groupId>org.sakaiproject.irubric-pt</groupId>
-    	<artifactId>irubric-pt</artifactId>
-    	<version>1.0.0</version>
-  	</parent>
-  
-  	<name>iRubric UI Tool Implementation</name>
-    <groupId>org.sakaiproject.irubric-pt</groupId>
-  	<artifactId>irubric-pt-impl</artifactId>
-  	
-  	<packaging>jar</packaging>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.sakaiproject.irubric</groupId>
+         <artifactId>irubric-tool-base</artifactId>
+        <version>12-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <name>irubric-tool-impl</name>
+    <groupId>org.sakaiproject.irubric</groupId>
+    <artifactId>irubric-tool-impl</artifactId>
+    <packaging>jar</packaging>
   
   	<dependencies>
   		<!-- irubric -->
     	<dependency>
-      		<groupId>org.sakaiproject.irubric-pt</groupId>
-      		<artifactId>irubric-pt-api</artifactId>
-            <version>${project.version}</version>
+      		<groupId>${project.groupId}</groupId>
+      		<artifactId>irubric-tool-api</artifactId>
     	</dependency>
         <dependency>
-            <groupId>org.sakaiproject.irubric-pt</groupId>
-            <artifactId>irubric-pt-bundle</artifactId>
-            <version>${project.version}</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>irubric-tool-bundle</artifactId>
         </dependency>
     	
     	<!-- Kernel -->
 		<dependency>
 			<groupId>org.sakaiproject.kernel</groupId>
 			<artifactId>sakai-kernel-api</artifactId>
-            <version>${sakai.kernel.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.sakaiproject.kernel</groupId>
             <artifactId>sakai-component-manager</artifactId>
-            <version>${sakai.kernel.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.sakaiproject.kernel</groupId>
 			<artifactId>sakai-kernel-util</artifactId>
-             <version>${sakai.kernel.version}</version>
 		</dependency>
 
         <!-- service gradebook -->
@@ -70,8 +64,8 @@
 	        <version>${sakai.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
+			<groupId>${sakai.spring.groupId}</groupId>
+			<artifactId>${sakai.spring.artifactId}</artifactId>
 		</dependency>
 	</dependencies>
 	

@@ -2,21 +2,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" 
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<packaging>pom</packaging> 
-    
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.sakaiproject</groupId>
         <artifactId>master</artifactId>
         <version>12-SNAPSHOT</version>
         <relativePath>../master/pom.xml</relativePath>
     </parent>
-    
-	<name>irubric-pt base pom</name>
-	<groupId>org.sakaiproject.irubric-pt</groupId>
-	<artifactId>irubric-pt</artifactId>
-    <version>1.0.0</version>
+
+	<name>irubric-tool-base</name>
+	<groupId>org.sakaiproject.irubric</groupId>
+	<artifactId>irubric-tool-base</artifactId>
     <description>Sakai iRubric tool</description>
+    <packaging>pom</packaging>
+
     <properties>
         <log4j.version>1.2.9</log4j.version>
     </properties>
@@ -32,20 +31,20 @@
     	<dependencies>
     	    <!-- irubric -->
             <dependency>
-                <groupId>org.sakaiproject.irubric-pt</groupId>
-                <artifactId>irubric-pt-api</artifactId>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>irubric-tool-api</artifactId>
                 <version>${project.version}</version>
                 <type>jar</type>
                 <scope>provided</scope>
             </dependency>
             <dependency>
-                <groupId>org.sakaiproject.irubric-pt</groupId>
-                <artifactId>irubric-pt-bundle</artifactId>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>irubric-tool-bundle</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.sakaiproject.irubric-pt</groupId>
-                <artifactId>irubric-pt-impl</artifactId>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>irubric-tool-impl</artifactId>
                 <version>${project.version}</version>
                 <type>jar</type>
             </dependency>
@@ -73,7 +72,6 @@
             <dependency>
                 <groupId>org.sakaiproject</groupId>
                 <artifactId>sakai-velocity-tool</artifactId>
-                <version>${project.version}</version>
             </dependency>
             
             <!-- fix error: run on tomcat 7 -->
@@ -82,9 +80,6 @@
                 <artifactId>commons-el</artifactId>
                 <version>1.0</version>
             </dependency>
-
-
-
     	</dependencies>
     </dependencyManagement>
 

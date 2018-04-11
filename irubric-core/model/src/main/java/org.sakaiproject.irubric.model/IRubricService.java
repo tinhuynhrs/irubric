@@ -3,6 +3,7 @@ package org.sakaiproject.irubric.model;
 import org.sakaiproject.service.gradebook.shared.GradebookService;
 import org.sakaiproject.site.api.SiteService;
 import java.io.PrintWriter;
+import org.sakaiproject.user.api.User;
 
 /**
  * Created with IntelliJ IDEA.
@@ -93,7 +94,7 @@ import java.io.PrintWriter;
     void updateAssignmetByRubric(Long gradebookItemId, String iRubricId,
                                  String iRubricTitle);
 
-    String getUserRoleType(String roleName);
+    String getUserRoleType(User user, String siteID);
 
     void buildPostDataForAttach(StringBuilder dataBuilder, String gradebookUid, Long gradebookItemId) throws Exception;
 
