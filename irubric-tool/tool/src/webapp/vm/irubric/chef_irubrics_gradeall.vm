@@ -91,8 +91,12 @@
 			<th id="duedate">
 				<a href="#" onclick="location='$baseURL'; return false;"  title="sort by due Date"> Due Date </a>
 			</th>
-			
-			<th id="action">iRubric</th>
+
+			<!--set link sort by rubric attached -->
+			#set ($baseURL=$sakai_ActionURL.reset().setParameter("sakai_action", "doSort").setQueryString('criteria=attachedrubric').toString())
+			<th id="action">
+				<a href="#" onclick="location='$baseURL'; return false;" title="sort by rubric attached"> iRubric </a>
+			</th>
 		</tr>
 
 		<!--show list gradebook items -->

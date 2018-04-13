@@ -78,15 +78,6 @@ public class RubricAction extends PagedResourceActionII
 	/** state sort ascendingly * */
 	private static final String SORTED_ASC = "iRubric.sorted_asc";
 
-	/** default sorting */
-	private static final String SORTED_BY_DEFAULT = "default";
-
-	/** sort by assignment title */
-	private static final String SORTED_BY_TITLE = "title";
-
-	/** sort by assignment due date */
-	private static final String SORTED_BY_DUEDATE = "duedate";
-
 	/** The user */
 	private static final String STATE_USER = "iRubric.user";
 	/**
@@ -268,7 +259,7 @@ public class RubricAction extends PagedResourceActionII
 		String template = (String) getContext(data).get("template");
 
 		//process paging and get list assignment in function sizeResources
-		List<Assignment> assignments = new ArrayList<>();
+		List<IRubricAssignment> assignments = new ArrayList<>();
 		try {
 			assignments = prepPage(state);
 			context.put("errorMsg","");
@@ -283,15 +274,26 @@ public class RubricAction extends PagedResourceActionII
 		//use set hide link gradeall(when user is selected)	
 		context.put("view", IRubricService.CMD_TOOL_GRADEALL);
 
-		//set into file .vm
-		context.put("assignments", assignments.iterator());
-
 		//set Info for paging
 		pagingInfoToContext(state, context);
 
 		//DN 2013-09-12: able to grade
 		Boolean ableGrade = rubService.ableToGrade(gradebookUId);
 		context.put("isAbleGrade", ableGrade.toString());
+
+		// If user is evaluatee, filter out assignments that don't have iRubric attached
+		if (!ableGrade) {
+			List<IRubricAssignment> filteredAssignments = new ArrayList<>(assignments.size());
+			for (IRubricAssignment assignment : assignments ) {
+				if (assignment.isRubricAttached()) {
+					filteredAssignments.add(assignment);
+				}
+			}
+
+			context.put("assignments", filteredAssignments.iterator());
+		} else {
+			context.put("assignments", assignments.iterator());
+		}
 
 		context.put("userId", userId);
 

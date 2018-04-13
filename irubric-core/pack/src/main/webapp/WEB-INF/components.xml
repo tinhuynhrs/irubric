@@ -21,7 +21,7 @@
    		<property name="siteService" ref="org.sakaiproject.site.api.SiteService" />
    		<property name="courseManagementService" ref="org.sakaiproject.coursemanagement.api.CourseManagementService" />
    		<property name="toolManager" ref="org.sakaiproject.tool.api.ToolManager" />
-
+   		<property name="securityService" ref="org.sakaiproject.authz.api.SecurityService" />
    		<property name="gradebookService" ref="org_sakaiproject_service_gradebook_GradebookService" />
 
    		<property name="serverConfigurationService" ref="org.sakaiproject.component.api.ServerConfigurationService" />

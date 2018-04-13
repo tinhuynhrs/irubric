@@ -38,6 +38,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.sakaiproject.authz.api.SecurityService;
 import org.sakaiproject.util.ResourceLoader;
 
 /**
@@ -79,6 +80,7 @@ public class IRubricServiceImpl implements Serializable, IRubricService {
 	private GradebookService gradebookService;
 	private ToolManager toolManager;
 	private ServerConfigurationService serverConfigurationService;
+	private SecurityService securityService;
 
     private IRubricManager iRubricManager;
 	
@@ -163,6 +165,15 @@ public class IRubricServiceImpl implements Serializable, IRubricService {
 	 */
 	public void setToolManager(ToolManager toolManager) {
 		this.toolManager = toolManager;
+	}
+
+	/**
+	 * set the securityService property this property is set by spring-beans.xml
+	 *
+	 * @param securityService
+	 */
+	public void setSecurityService(SecurityService securityService) {
+		this.securityService = securityService;
 	}
 
 	/**
@@ -354,6 +365,11 @@ public class IRubricServiceImpl implements Serializable, IRubricService {
 		String userId = userDirectoryService.getCurrentUser().getId();
 
 		Site site = siteService.getSite(siteId);
+
+		// If user is admin, return maintain role for the site
+		if (securityService.isSuperUser( userId )) {
+			return site.getMaintainRole();
+		}
 
 		// query teacher of this class
 		Set<Member> members = site.getMembers();

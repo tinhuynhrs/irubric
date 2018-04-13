@@ -35,6 +35,7 @@ public class RubricToolServiceImpl implements RubricToolService
     
     private static final String SORTED_BY_TITLE = "title";
     private static final String SORTED_BY_DUEDATE = "duedate";
+    private static final String SORTED_BY_ATTACHED_RUBRIC = "attachedrubric";
     private static final String SORTED_BY_SORT_ORDER = "sortOrder";
     private static final String EPORTFOLIO = "irubric.eportfolio";
 
@@ -333,6 +334,14 @@ public class RubricToolServiceImpl implements RubricToolService
 				{
 					result = 1;
 				}
+			}
+
+			else if (m_criteria.equals(SORTED_BY_ATTACHED_RUBRIC))
+			{
+				ScoringAgent agent = scoringService.getDefaultScoringAgent();
+				boolean a1 = agent.getScoringComponent(toolManager.getCurrentPlacement().getContext(), Long.toString(assignment1.getId())) != null;
+				boolean a2 = agent.getScoringComponent(toolManager.getCurrentPlacement().getContext(), Long.toString(assignment2.getId())) != null;
+				result = Boolean.compare(a1, a2);
 			}
 			
 			// sort ascending or descending

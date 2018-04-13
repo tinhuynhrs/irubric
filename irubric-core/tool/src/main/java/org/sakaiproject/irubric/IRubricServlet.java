@@ -227,10 +227,7 @@ public class IRubricServlet extends HttpServlet {
                 LOG.info("Data trasnfering - " + dataPacket);
             } catch (Exception ex) {
                 LOG.error("Constructing data packet", ex);
-                renderErrorMessageByCmd(
-                                writer,
-                                cmd,
-                                "Error while constructing data packet. Please contact your system administrator.");
+                renderErrorMessageByCmd(writer, cmd, rl.getString("irubric.buildPost.error"));
             }
 
             // authenticate with iRubric system
