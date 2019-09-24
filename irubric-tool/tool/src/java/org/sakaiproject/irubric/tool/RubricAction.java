@@ -265,7 +265,7 @@ public class RubricAction extends PagedResourceActionII
 		Boolean ableGrade = rubService.ableToGrade(gradebookUId);
 		context.put("isAbleGrade", ableGrade.toString());
 
-		//TH 2019-09-24 (Issue 672): Set the page size to 200 
+		//TH 2019-09-24 (Issue 672): Set the page size to 200 so that all the assignment is avaiable to the student
 		if (!ableGrade){
 			state.setAttribute(STATE_PAGESIZE, 200);
 		}
