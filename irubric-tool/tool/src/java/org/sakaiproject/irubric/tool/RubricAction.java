@@ -260,6 +260,16 @@ public class RubricAction extends PagedResourceActionII
 
 		//process paging and get list assignment in function sizeResources
 		List<IRubricAssignment> assignments = new ArrayList<>();
+
+		//TH 2019-09-24 (Issue 672): moved here from below
+		Boolean ableGrade = rubService.ableToGrade(gradebookUId);
+		context.put("isAbleGrade", ableGrade.toString());
+
+		//TH 2019-09-24 (Issue 672): Set the page size to 200 
+		if (!ableGrade){
+			state.setAttribute(STATE_PAGESIZE, 200);
+		}
+
 		try {
 			assignments = prepPage(state);
 			context.put("errorMsg","");
@@ -278,8 +288,10 @@ public class RubricAction extends PagedResourceActionII
 		pagingInfoToContext(state, context);
 
 		//DN 2013-09-12: able to grade
+		/*TH 2019-09-24 (Issue 672): Moved on top, before the initalization of the assignments so that we can check if user is student, then set
+		 page size to 200 for student
 		Boolean ableGrade = rubService.ableToGrade(gradebookUId);
-		context.put("isAbleGrade", ableGrade.toString());
+		context.put("isAbleGrade", ableGrade.toString()); */
 
 		// If user is evaluatee, filter out assignments that don't have iRubric attached
 		if (!ableGrade) {
