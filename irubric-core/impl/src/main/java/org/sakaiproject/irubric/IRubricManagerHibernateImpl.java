@@ -214,9 +214,10 @@ public class IRubricManagerHibernateImpl extends HibernateDaoSupport
     
     public List<GradableObjectRubric> getAllRubricsInGradebook(String gradebookUid) {
     	List<GradableObjectRubric> rubrics = new ArrayList<GradableObjectRubric>();
-    	
-    	// retrieve all of the gradebook items in the gradebook
-    	List<Assignment> fromGbItems = gradebookService.getAssignments(gradebookUid);
+
+      try {
+        // retrieve all of the gradebook items in the gradebook
+        List<Assignment> fromGbItems = gradebookService.getAssignments(gradebookUid);
         List<Long> fromGbItemIds = getGradebookItemIds(fromGbItems);
 
         if(fromGbItems != null && !fromGbItems.isEmpty()) {
@@ -224,7 +225,10 @@ public class IRubricManagerHibernateImpl extends HibernateDaoSupport
             // retrieve the rubrics in the site we are importing, if they exist
             rubrics = getGradableObjectRubrics(fromGbItemIds);
         }
-    	
+      } catch (Exception e) {
+        // If no GB, a GradebookNotFoundException will be thrown
+      }
+
     	return rubrics;
     }
     
